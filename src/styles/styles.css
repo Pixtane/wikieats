@@ -1,0 +1,99 @@
+:root {
+    --font-size: 1rem;
+}
+
+body {
+    background: #333;
+    color: #fff;
+
+    display: flex;
+    /* Enable flexbox for the body */
+    align-items: center;
+    /* Center items vertically */
+    justify-content: center;
+    /* Center items horizontally */
+    height: 100svh;
+
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size);
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+
+.google-login p,
+form p {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.google-logo {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.login-with-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--font-size);
+    gap: 0.5rem;
+
+    width: 100%;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+    transition-duration: 150ms;
+}
+
+.login-with-google-btn:hover {
+    box-shadow: 0 1px 10px 3px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+form {
+    justify-content: center;
+}
+
+
+
+.login-with-google-btn,
+.login-with-email-btn {
+    background: #fff;
+    color: #000;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+.login-with-email-btn {
+    background: #4caf50;
+    border-radius: 0.5rem;
+    font-size: var(--font-size);
+    font-family: 'Red Hat Display', sans-serif;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: #444;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 0.5rem;
+    font-size: var(--font-size);
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+/* Add more styles as needed */
