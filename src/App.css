@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.activeNavBarItem {
+    @apply text-[#2DD881] hover:bg-[#1DC8710F] rounded-t-lg hover:text-[#1DC871] focus:text-[#3DE891] font-medium border-b-2 border-b-[#2DD881]
+}
+
+.badgeTooltip {
+    @apply bg-gray-100 border delay-300 duration-300 transition-transform origin-top-left mt-2 ml-3 w-60 text-gray-900 absolute rounded-lg p-2 scale-0
+}
+
+.badgeTooltip h1 {
+    @apply font-bold text-lg
+}
+
+.unselectable {
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

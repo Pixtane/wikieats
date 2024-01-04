@@ -2,7 +2,8 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/landing/index";
 import Auth from "./pages/auth/index";
-import User from "./pages/user/index";
+import UserRouter from "./pages/user/UserRouter";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/user/*" element={<User />} />
+          <Route path="/user/:UID/*" element={<UserRouter />} />
+          <Route path="*" element={<NotFound linkPath={`/`} />} />
         </Routes>
       </Router>
     </>

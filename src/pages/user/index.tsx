@@ -1,136 +1,111 @@
-import BadgeList from "../../components/badgeList";
-import BrandLogo from "../../components/brandLogo";
-import SiteSearch from "../../components/siteSearch";
-import UserProfile from "../../components/userProfile";
+import { useParams } from "react-router-dom";
+
+import { getUserData } from "./hooks/getData";
+import Navbar from "../../components/navbar";
+import UserNavbar from "../../pages/user/components/UserNavbar";
 
 const User = () => {
-  let gender = "female";
-  if (false) {
-    return (
-      <>
-        <div className="navbar">
-          <BrandLogo></BrandLogo>
-          <SiteSearch></SiteSearch>
-          <UserProfile></UserProfile>
-        </div>
-        <header className="hero">
-          <div className="profile-picture">
-            <div className="ppicture">
-              <img src="" alt="" />
-            </div>
-            <div className={"genderBox color-" + gender}></div>
-          </div>
-          <section className="hero-content">
-            <h1 className="">TastyExplorer</h1>
-            <BadgeList />
-            <p>
-              Culinary wanderer on a global flavor quest! 🌍 Vegetarian,
-              dessert enthusiast, and recipe creator. Let's cook, share, and
-              savor together! 🍲✨ #FoodieAdventures
-            </p>
-          </section>
-        </header>
-        <hr className="headerDivider" />
-        <nav></nav>
-        <aside></aside>
-        <main></main>
-        <footer></footer>
-      </>
-    );
+  const { UID } = useParams();
+  if (!UID) {
+    return <p>Error 404. To get user page enter /user/UID in URL</p>;
   }
+  let { userData, genderColor, loading } = getUserData(UID);
+  let { username, description, logo } = userData;
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
-      <img
-        src="/img/beams.jpg"
-        alt=""
-        className="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
-        width="1308"
-      />
-      <div className="absolute inset-0 bg-[url(/img/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
-        <div className="mx-auto max-w-md">
-          <img src="/img/logo.svg" className="h-6" alt="Tailwind Play" />
-          <div className="divide-y divide-gray-300/50">
-            <div className="space-y-6 py-8 text-base leading-7 text-gray-600">
-              <p>
-                An advanced online playground Tailwind CSS, including support
-                for things like:
-              </p>
-              <ul className="space-y-4">
-                <li className="flex items-center">
-                  <svg
-                    className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="11" />
-                    <path
-                      d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
-                      fill="none"
-                    />
-                  </svg>
-                  <p className="ml-4">
-                    Customizing your
-                    <code className="text-sm font-bold text-gray-900">
-                      tailwind.config.js
-                    </code>{" "}
-                    file
-                  </p>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="11" />
-                    <path
-                      d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
-                      fill="none"
-                    />
-                  </svg>
-                  <p className="ml-4">
-                    Extracting classes with
-                    <code className="text-sm font-bold text-gray-900">
-                      @apply
-                    </code>
-                  </p>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="11" />
-                    <path
-                      d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
-                      fill="none"
-                    />
-                  </svg>
-                  <p className="ml-4">Code completion with instant preview</p>
-                </li>
-              </ul>
-              <p>
-                Perfect for learning how the framework works, prototyping a new
-                idea, or creating a demo to share online.
-              </p>
+    <>
+      <Navbar />
+
+      <div className="flex bg-white">
+        <div className="w-full"></div>
+        <div className=" w-[225rem] h-screen ">
+          <div className="h-14"></div>
+          <header className="hero flex flex-row justify-start">
+            <div role="spacer" className="w-12"></div>
+            <div className="profile-picture w-[12.5rem] flex flex-col justify-center items-center mb-8">
+              <div className="ppicture w-[12.5rem] h-[12.5rem] rounded-full overflow-hidden relative mb-3">
+                <img
+                  className="top-0 bottom-0 left-0 right-0 object-cover  m-auto"
+                  src={logo}
+                  alt={`${username}'s profile`}
+                />
+              </div>
+              <div
+                className={`genderBox ${genderColor} w-[3.1rem] h-[10px] rounded-full`}
+              ></div>
             </div>
-            <div className="pt-8 text-base font-semibold leading-7">
-              <p className="text-gray-900">Want to dig deeper into Tailwind?</p>
-              <p>
-                <a
-                  href="https://tailwindcss.com/docs"
-                  className="text-sky-500 hover:text-sky-600"
-                >
-                  Read the docs &rarr;
-                </a>
-              </p>
-            </div>
-          </div>
+            <div role="spacer" className="w-[1.25rem]"></div>
+            <section className="w-[32rem] flex flex-col">
+              <div className="h-full"></div>
+              <section className="hero-content flex flex-row gap-3 items-center">
+                <h1 className="font-bold text-[2rem] leading-[2.75rem]">
+                  {username}
+                </h1>
+                <div className="badges h-[1.625rem] flex flex-row">
+                  {userData.generated &&
+                    userData.generated.badges &&
+                    userData.generated.badges.map(
+                      (badge: any, index: number) => (
+                        <span
+                          key={index}
+                          className="w-[1.625rem] h-[1.625rem] group"
+                        >
+                          <img
+                            className="w-full h-full unselectable"
+                            src={badge.logo}
+                            alt={badge.title}
+                          />
+                          <span className="badgeTooltip group-hover:scale-100">
+                            <h1>
+                              {badge.title.charAt(0).toUpperCase() +
+                                badge.title.slice(1)}
+                            </h1>
+                            <p>{badge.description}</p>
+                          </span>
+                        </span>
+
+                        // You can customize the badge rendering as needed
+                      )
+                    )}
+                </div>
+              </section>
+              <section className="mt-2 text-[#7C7C7C] font-medium text-[0.95rem] leading-5">
+                {description}
+              </section>
+              <div className="h-[4.7rem] mb-[1.5rem] mt-[0.5rem] flex items-center">
+                {userData.extended &&
+                  userData.extended.diet &&
+                  userData.extended.diet.map(
+                    (preferenceIdentity: any, index: number) => (
+                      <span
+                        key={index}
+                        className="h-[1.625rem] cursor-context-menu rounded-md p-[0.2rem] px-2 mr-1 text-[#7C7C7C] hover:bg-[#E2E2E2] transition-colors font-medium text-sm bg-[#F2F2F2]"
+                      >
+                        {preferenceIdentity.charAt(0).toUpperCase() +
+                          preferenceIdentity.slice(1)}
+                      </span>
+
+                      // You can customize the badge rendering as needed
+                    )
+                  )}
+              </div>
+            </section>
+          </header>
+          <hr className="headerDivider bg-[#D9D9D9] h-[1px] border-none" />
+          <nav>
+            <UserNavbar></UserNavbar>
+          </nav>
+          <aside></aside>
+          <main></main>
+          <footer></footer>
         </div>
+        <div className="w-full"></div>
       </div>
-    </div>
+    </>
   );
 };
 
