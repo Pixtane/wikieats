@@ -2,7 +2,32 @@ import { useParams } from "react-router-dom";
 
 import { getUserData } from "./hooks/getData";
 import Navbar from "../../components/navbar";
-import UserNavbar from "../../pages/user/components/UserNavbar";
+import UserNavbar from "./components/UserNavbar";
+
+import Star from "../../assets/images/star.svg";
+import Dollar from "../../assets/images/dollar.svg";
+import Calories from "../../assets/images/fire.svg";
+import Time from "../../assets/images/time.svg";
+
+const RecipeStat: any = (compare: any, value: any, icon: any) => {
+  return (
+    compare && (
+      <div className="rating flex gap-1">
+        <p className="font-bold">{value}</p>
+        <img src={icon} className="unselectable" />
+      </div>
+    )
+  );
+};
+
+const OReference = (obj: any) => {
+  return obj.reference._key.path.segments;
+};
+
+const navigate = (path: string) => {
+  console.log(path);
+  window.location.href = window.location.origin + path;
+};
 
 const User = () => {
   const { UID } = useParams();
@@ -81,10 +106,7 @@ const User = () => {
                   userData.extended.diet &&
                   userData.extended.diet.map(
                     (preferenceIdentity: any, index: number) => (
-                      <span
-                        key={index}
-                        className="h-[1.625rem] cursor-context-menu rounded-md p-[0.2rem] px-2 mr-1 text-[#7C7C7C] hover:bg-[#E2E2E2] transition-colors font-medium text-sm bg-[#F2F2F2]"
-                      >
+                      <span key={index} className="tag">
                         {preferenceIdentity.charAt(0).toUpperCase() +
                           preferenceIdentity.slice(1)}
                       </span>
@@ -99,9 +121,154 @@ const User = () => {
           <nav>
             <UserNavbar></UserNavbar>
           </nav>
-          <aside></aside>
-          <main></main>
-          <footer></footer>
+          <div className="flex justify-between">
+            <main className="w-[65%]">
+              <h1 className="font-medium mt-3 mb-1 ml-2 text-[#505050]">
+                My Recipies
+              </h1>
+              {userData.extended &&
+                userData.extended.recipies &&
+                userData.extended.recipies.map((recipe: any, index: number) => (
+                  <div
+                    className="recipe bg-[#FCFCFC] border border-[#D9D9D9] rounded-2xl mb-4 ml-2"
+                    key={index}
+                  >
+                    <div className="flex flex-row">
+                      <div className="p-4">
+                        <h1
+                          onClick={() =>
+                            navigate(
+                              `/${
+                                OReference(recipe)[
+                                  OReference(recipe).length - 2
+                                ]
+                              }/${
+                                OReference(recipe)[
+                                  OReference(recipe).length - 1
+                                ]
+                              }`
+                            )
+                          }
+                          className="text-[#505050] text-2xl mb-1 font-medium hover:text-black hover:underline cursor-pointer"
+                        >
+                          {recipe.title}
+                        </h1>
+                        <p className="text-sm text-[#7C7C7C] mb-3">
+                          {recipe.description}…
+                        </p>
+
+                        {recipe.tags.map((tag: any, index: number) => (
+                          <span className="tag ">{tag}</span>
+                        ))}
+                      </div>
+                      <aside className="flex flex-col items-end mt-4 m-2 p-1 px-2 pr-6 text-sm w-10">
+                        {RecipeStat(recipe.rating, recipe.rating, Star)}
+                        {RecipeStat(
+                          recipe.price,
+                          recipe.price.toFixed(2),
+                          Dollar
+                        )}
+                        {RecipeStat(recipe.calories, recipe.calories, Calories)}
+                        {RecipeStat(recipe.cookTime, recipe.cookTime, Time)}
+                      </aside>
+                    </div>
+                    {recipe.image && (
+                      <img
+                        className="w-full h-52 object-cover rounded-b-2xl"
+                        src={recipe.image}
+                        alt={recipe.title}
+                      />
+                    )}
+                  </div>
+
+                  // You can customize the badge rendering as needed
+                ))}
+            </main>
+            <aside className="w-[33.5%] mt-4">
+              {userData.extended.friends && (
+                <div>
+                  <h1 className="font-medium text-[#505050]">Friends</h1>
+                  <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-36 px-4">
+                    {userData.extended.friends.map(
+                      (friend: any, index: number) => (
+                        <div
+                          onClick={() =>
+                            navigate(
+                              `/${
+                                OReference(friend)[
+                                  OReference(friend).length - 2
+                                ]
+                              }/${
+                                OReference(friend)[
+                                  OReference(friend).length - 1
+                                ]
+                              }`
+                            )
+                          }
+                          key={index}
+                          className="flex mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
+                        >
+                          <img
+                            className="w-[4rem] h-[4rem] rounded-full object-cover border"
+                            src={friend.image}
+                            alt={friend.username}
+                          />
+                          <h2 className="font-medium text-[#505050] text-sm">
+                            {friend.username}
+                          </h2>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+              {userData.extended.achievements && (
+                <div>
+                  <h1 className="font-medium text-[#505050]">Achievements</h1>
+                  <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-32 px-4">
+                    {userData.extended.achievements.map(
+                      (achievement: any, index: number) => (
+                        <div
+                          onClick={() =>
+                            navigate(
+                              `/${
+                                OReference(achievement)[
+                                  OReference(achievement).length - 2
+                                ]
+                              }/${
+                                OReference(achievement)[
+                                  OReference(achievement).length - 1
+                                ]
+                              }`
+                            )
+                          }
+                          key={index}
+                          className="flex group mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
+                        >
+                          <img
+                            className="w-[4rem] h-[4rem]"
+                            src={achievement.image}
+                            alt={achievement.title}
+                          />
+                          <h2 className="font-medium text-[#505050] text-sm">
+                            {achievement.title}
+                          </h2>
+                          <span className="achievementTooltip group-hover:scale-100">
+                            <h1>
+                              {achievement.title.charAt(0).toUpperCase() +
+                                achievement.title.slice(1)}
+                            </h1>
+                            <p>{achievement.description}</p>
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+            </aside>
+          </div>
+          <footer className="h-[10rem]"></footer>
         </div>
         <div className="w-full"></div>
       </div>
