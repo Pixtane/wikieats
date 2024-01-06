@@ -28,7 +28,7 @@ const Auth = () => {
     try {
       const results = await signInWithPopup(auth, provider);
       saveAuth(results);
-      addUser(
+      await addUser(
         results.user.uid,
         results.user.email ? results.user.email : "",
         results.user.displayName ? results.user.displayName : "Unnamed User",
@@ -36,7 +36,7 @@ const Auth = () => {
           ? results.user.photoURL
           : "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-541.jpg"
       );
-      //gotoAccountPage(results.user.uid);
+      gotoAccountPage(results.user.uid);
     } catch (error: any) {
       console.log(error, error.message);
       setError("Something went wrong! " + error.message);
@@ -55,7 +55,7 @@ const Auth = () => {
         password
       );
       saveAuth(results);
-      addUser(
+      await addUser(
         results.user.uid,
         email,
         username,

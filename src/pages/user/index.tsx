@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { getUserData } from "./hooks/getData";
+import { getUserData } from "./hooks/getUserData";
 import Navbar from "../../components/navbar";
 import UserNavbar from "./components/UserNavbar";
 
@@ -34,8 +34,19 @@ const User = () => {
   if (!UID) {
     return <p>Error 404. To get user page enter /user/UID in URL</p>;
   }
-  let { userData, genderColor, loading } = getUserData(UID);
-  let { username, description, logo } = userData;
+
+  const { userData, genderColor, loading } = getUserData(
+    UID,
+    new Map<string, string[]>([
+      ["extended", ["public", "extended"]],
+      ["generated", ["public", "generated"]],
+    ])
+  );
+
+  let { username, name, description, logo } = userData;
+  //console.log("index got this: ", userData, genderColor, loading);
+  username = name ? name : username; // Uses both username and name under username variable
+  let UExtended = userData.extended;
 
   if (loading) {
     return <p>Loading...</p>;
@@ -54,7 +65,7 @@ const User = () => {
             <div className="profile-picture w-[12.5rem] flex flex-col justify-center items-center mb-8">
               <div className="ppicture w-[12.5rem] h-[12.5rem] rounded-full overflow-hidden relative mb-3">
                 <img
-                  className="top-0 bottom-0 left-0 right-0 object-cover  m-auto"
+                  className="top-0 bottom-0 left-0 right-0 object-cover min-h-full min-w-full m-auto"
                   src={logo}
                   alt={`${username}'s profile`}
                 />
@@ -102,9 +113,9 @@ const User = () => {
                 {description}
               </section>
               <div className="h-[4.7rem] mb-[1.5rem] mt-[0.5rem] flex items-center">
-                {userData.extended &&
-                  userData.extended.diet &&
-                  userData.extended.diet.map(
+                {UExtended &&
+                  UExtended.diet &&
+                  UExtended.diet.map(
                     (preferenceIdentity: any, index: number) => (
                       <span key={index} className="tag">
                         {preferenceIdentity.charAt(0).toUpperCase() +
@@ -124,11 +135,15 @@ const User = () => {
           <div className="flex justify-between">
             <main className="w-[65%]">
               <h1 className="font-medium mt-3 mb-1 ml-2 text-[#505050]">
-                My Recipies
+                {UExtended
+                  ? UExtended.recipies
+                    ? "My Recipies"
+                    : "No Recipies"
+                  : "No Recipies"}
               </h1>
-              {userData.extended &&
-                userData.extended.recipies &&
-                userData.extended.recipies.map((recipe: any, index: number) => (
+              {UExtended &&
+                UExtended.recipies &&
+                UExtended.recipies.map((recipe: any, index: number) => (
                   <div
                     className="recipe bg-[#FCFCFC] border border-[#D9D9D9] rounded-2xl mb-4 ml-2"
                     key={index}
@@ -185,86 +200,92 @@ const User = () => {
                 ))}
             </main>
             <aside className="w-[33.5%] mt-4">
-              {userData.extended.friends && (
-                <div>
-                  <h1 className="font-medium text-[#505050]">Friends</h1>
-                  <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-36 px-4">
-                    {userData.extended.friends.map(
-                      (friend: any, index: number) => (
-                        <div
-                          onClick={() =>
-                            navigate(
-                              `/${
-                                OReference(friend)[
-                                  OReference(friend).length - 2
-                                ]
-                              }/${
-                                OReference(friend)[
-                                  OReference(friend).length - 1
-                                ]
-                              }`
-                            )
-                          }
-                          key={index}
-                          className="flex mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
-                        >
-                          <img
-                            className="w-[4rem] h-[4rem] rounded-full object-cover border"
-                            src={friend.image}
-                            alt={friend.username}
-                          />
-                          <h2 className="font-medium text-[#505050] text-sm">
-                            {friend.username}
-                          </h2>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              )}
-              {userData.extended.achievements && (
-                <div>
-                  <h1 className="font-medium text-[#505050]">Achievements</h1>
-                  <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-32 px-4">
-                    {userData.extended.achievements.map(
-                      (achievement: any, index: number) => (
-                        <div
-                          onClick={() =>
-                            navigate(
-                              `/${
-                                OReference(achievement)[
-                                  OReference(achievement).length - 2
-                                ]
-                              }/${
-                                OReference(achievement)[
-                                  OReference(achievement).length - 1
-                                ]
-                              }`
-                            )
-                          }
-                          key={index}
-                          className="flex group mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
-                        >
-                          <img
-                            className="w-[4rem] h-[4rem]"
-                            src={achievement.image}
-                            alt={achievement.title}
-                          />
-                          <h2 className="font-medium text-[#505050] text-sm">
-                            {achievement.title}
-                          </h2>
-                          <span className="achievementTooltip group-hover:scale-100">
-                            <h1>
-                              {achievement.title.charAt(0).toUpperCase() +
-                                achievement.title.slice(1)}
-                            </h1>
-                            <p>{achievement.description}</p>
-                          </span>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
+              {UExtended && (
+                <>
+                  {UExtended.achievements && (
+                    <div>
+                      <h1 className="font-medium text-[#505050] ml-1">
+                        Achievements
+                      </h1>
+                      <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-32 px-4">
+                        {UExtended.achievements.map(
+                          (achievement: any, index: number) => (
+                            <div
+                              onClick={() =>
+                                navigate(
+                                  `/${
+                                    OReference(achievement)[
+                                      OReference(achievement).length - 2
+                                    ]
+                                  }/${
+                                    OReference(achievement)[
+                                      OReference(achievement).length - 1
+                                    ]
+                                  }`
+                                )
+                              }
+                              key={index}
+                              className="flex group mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
+                            >
+                              <img
+                                className="w-[4rem] h-[4rem]"
+                                src={achievement.image}
+                                alt={achievement.title}
+                              />
+                              <h2 className="font-medium text-[#505050] text-sm">
+                                {achievement.title}
+                              </h2>
+                              <span className="achievementTooltip group-hover:scale-100">
+                                <h1>
+                                  {achievement.title.charAt(0).toUpperCase() +
+                                    achievement.title.slice(1)}
+                                </h1>
+                                <p>{achievement.description}</p>
+                              </span>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {UExtended.friends && (
+                    <div>
+                      <h1 className="font-medium text-[#505050] ml-1">
+                        Friends
+                      </h1>
+                      <div className="flex flex-row justify-center bg-[#FCFCFC] border border-[#D9D9D9] rounded-xl h-36 px-4">
+                        {UExtended.friends.map((friend: any, index: number) => (
+                          <div
+                            onClick={() =>
+                              navigate(
+                                `/${
+                                  OReference(friend)[
+                                    OReference(friend).length - 2
+                                  ]
+                                }/${
+                                  OReference(friend)[
+                                    OReference(friend).length - 1
+                                  ]
+                                }`
+                              )
+                            }
+                            key={index}
+                            className="flex mt-5 flex-col text-center items-center w-1/3 cursor-pointer hover:text-black hover:underline"
+                          >
+                            <img
+                              className="w-[4rem] h-[4rem] rounded-full object-cover border"
+                              src={friend.image}
+                              alt={friend.username}
+                            />
+                            <h2 className="font-medium text-[#505050] text-sm">
+                              {friend.username}
+                            </h2>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </aside>
           </div>
