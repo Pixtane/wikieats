@@ -4,6 +4,7 @@ import Landing from "./pages/landing/index";
 import Auth from "./pages/auth/index";
 import UserRouter from "./pages/user/UserRouter";
 import NotFound from "./pages/NotFound";
+import SignIn from "./pages/signin/index";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/user/:UID/*" element={<UserRouter />} />
           <Route path="*" element={<NotFound linkPath={`/`} />} />
         </Routes>
