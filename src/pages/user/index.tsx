@@ -8,6 +8,7 @@ import Star from "../../assets/images/star.svg";
 import Dollar from "../../assets/images/dollar.svg";
 import Calories from "../../assets/images/fire.svg";
 import Time from "../../assets/images/time.svg";
+import { toMultiline } from "../../hooks/useFirebaseMultiline";
 
 const RecipeStat: any = (compare: any, value: any, icon: any) => {
   return (
@@ -110,7 +111,7 @@ const User = () => {
                 </div>
               </section>
               <section className="mt-2 text-[#7C7C7C] font-medium text-[0.95rem] leading-5">
-                {description}
+                {toMultiline(description)}
               </section>
               <div className="h-[4.7rem] mb-[1.5rem] mt-[0.5rem] flex items-center">
                 {UExtended &&

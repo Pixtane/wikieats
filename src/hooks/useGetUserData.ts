@@ -43,7 +43,7 @@ export const useGetUserData = (
           );
 
           //return Promise.all(additionalDataPromises);
-          console.log("All files found: ", userDataResult);
+          //console.log("All files found: ", userDataResult);
           setUserData(userDataResult);
         } else {
           console.log("Additional data not requested: ", userDataResult);
