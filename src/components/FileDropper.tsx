@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import EditableField from "./editableField";
 
 // FRONTEND BY Håvard Brynjulfsen
 // FROM https://codepen.io/havardob/pen/mdPoYmY
@@ -6,11 +7,19 @@ import { useEffect, useState } from "react";
 type Props = {
   closeFileDropper: () => void;
   onFileUpload: (file: File) => void;
+  title?: string;
+  URLwriter?: (url: string) => void;
 };
 
-const FileDropper = ({ closeFileDropper, onFileUpload }: Props) => {
+const FileDropper = ({
+  closeFileDropper,
+  onFileUpload,
+  title,
+  URLwriter,
+}: Props) => {
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  let [urlValue, setUrlValue] = useState("");
 
   useEffect(() => {
     // Dynamically import the CSS module
@@ -58,6 +67,10 @@ const FileDropper = ({ closeFileDropper, onFileUpload }: Props) => {
       // Call the callback function to handle the file upload
       onFileUpload(selectedFile);
       closeFileDropper(); // Close the file dropper modal
+    } else if (URLwriter && urlValue !== "") {
+      setFilePreview(urlValue);
+      URLwriter(urlValue);
+      closeFileDropper();
     }
   };
 
@@ -112,8 +125,10 @@ const FileDropper = ({ closeFileDropper, onFileUpload }: Props) => {
           </button>
         </div>
         <div className="modal-body">
-          <h2 className="modal-title">Upload a file</h2>
-          <p className="modal-description">Attach the file below</p>
+          <h2 className="modal-title">Upload {title ? title : "a file"}</h2>
+          <p className="modal-description">
+            Attach the {title ? title : "file"} below
+          </p>
           <button className="upload-area relative">
             {filePreview && (
               <>
@@ -172,6 +187,20 @@ const FileDropper = ({ closeFileDropper, onFileUpload }: Props) => {
               onChange={handleFileChange}
             />
           </button>
+          {URLwriter && (
+            <div className="w-full flex flex-col items-center">
+              <span className="font-bold mt-2">OR</span>
+              <input
+                className="outline-none w-full bg-white border-b-2 border  focus:border-b-green-300 px-2"
+                type="url"
+                name="url"
+                id="imgurl"
+                autoComplete="photo"
+                placeholder="Write or paste URL here"
+                onChange={(e) => setUrlValue(e.target.value)}
+              />
+            </div>
+          )}
         </div>
         <div className="modal-footer">
           <button onClick={closeFileDropper} className="btn-secondary">

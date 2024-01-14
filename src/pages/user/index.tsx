@@ -31,6 +31,7 @@ const navigate = (path: string) => {
 };
 
 const User = () => {
+  //#region Data getter
   const { UID } = useParams();
   if (!UID) {
     return <p>Error 404. To get user page enter /user/UID in URL</p>;
@@ -52,6 +53,7 @@ const User = () => {
   if (loading) {
     return <p>Loading...</p>;
   }
+  //#endregion
 
   return (
     <>
@@ -114,17 +116,27 @@ const User = () => {
                 {toMultiline(description)}
               </section>
               <div className="h-[4.7rem] mb-[1.5rem] mt-[0.5rem] flex items-center">
+                {console.log(UExtended.diet, typeof UExtended.diet)}
                 {UExtended &&
                   UExtended.diet &&
-                  UExtended.diet.map(
-                    (preferenceIdentity: any, index: number) => (
+                  Array.isArray(UExtended.diet) &&
+                  UExtended.diet
+                    .filter((item: any) => item !== "None")
+                    .map((preferenceIdentity: string, index: number) => (
                       <span key={index} className="tag">
                         {preferenceIdentity.charAt(0).toUpperCase() +
                           preferenceIdentity.slice(1)}
                       </span>
 
                       // You can customize the badge rendering as needed
-                    )
+                    ))}
+                {UExtended &&
+                  UExtended.diet &&
+                  typeof UExtended.diet == "string" && (
+                    <span key={1} className="tag">
+                      {UExtended.diet.charAt(0).toUpperCase() +
+                        UExtended.diet.slice(1)}
+                    </span>
                   )}
               </div>
             </section>
